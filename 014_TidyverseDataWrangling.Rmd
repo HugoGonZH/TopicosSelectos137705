@@ -1,0 +1,88 @@
+---
+title: "DataWrangling"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Paquetes gapminder y dplyr
+
+
+```{r}
+
+install.packages("gapminder")
+install.packages("dplyr")
+library(gapminder)
+library(dplyr)
+gapminder
+
+
+```
+
+## Filtrar por año
+
+```{r}
+
+gapminder %>%
+  filter(year == 1957)
+
+```
+
+## Filtrar pot pais y año
+
+```{r}
+
+gapminder %>%
+  filter(country == "China", year == 2002)
+
+```
+
+#Organizar
+Ordena las observaciones de manera ascendente o descendente de una variable en particular
+
+```{r}
+
+gapminder %>%
+  arrange(lifeExp)
+
+gapminder %>%
+  arrange(desc(lifeExp))
+
+```
+
+#Filtrar y ordenar
+
+```{r}
+
+gapminder %>%
+  filter(year == 1957) %>%
+  arrange(desc(pop))
+
+```
+
+#Mutar
+
+```{r}
+
+gapminder %>%
+  mutate(lifeExp = lifeExp * 12)
+
+gapminder %>%
+  mutate(lifeExpMonth = lifeExp * 12)
+
+```
+
+#Mezclar todo
+
+```{r}
+
+gapminder %>%
+  filter(year == 2007) %>%
+  mutate(lifeExpMonth = 12 * lifeExp) %>%
+  arrange(desc(lifeExpMonth))
+
+```
+
+

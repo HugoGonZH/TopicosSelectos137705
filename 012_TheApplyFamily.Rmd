@@ -1,0 +1,206 @@
+---
+title: "TheApplyFamily"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Ejemplos con applys
+Las funciones lapply aplica una funcion a cada elemento de una lsita o vector
+
+
+```{r }
+
+pioneers <- c("GAUSS:1777", "BAYES:1702", "PASCAL:1623", "PEARSON:1857")
+
+#Dividimos los datos a partir de un punto, en
+#este caso los dos puntos
+split_math <- strsplit(pioneers, split = ":")
+split_math
+
+#Esto vuelve minusculas todas las letras
+split_low <- lapply(split_math, tolower)
+split_low
+
+#mostramos la estructura de split_low
+str(split_low)
+
+```
+
+## Usar lapply en nuestras funciones
+
+```{r}
+
+#Creamos nuestra funcion
+seleccionar_primero <- function(x){
+  x[1]
+}
+
+#la usamos con la funcion lapply y la que ya teniamos
+names <- lapply(split_low, seleccionar_primero)
+names
+
+##########################################
+seleccionar_segundo <- function(x){
+  x[2]
+}
+
+years <- lapply(split_low, seleccionar_segundo)
+years
+
+```
+
+## Funciones anonimas
+Se pueden usar funciones anonimas con lapply, para crear las funciones anonimas lo unico que se tiene que hacer es no definirlas/nombrarlas.
+
+```{r}
+
+names <- lapply(split_low, function(x){x[1]})
+names
+
+years <- lapply(split_low, function(x){x[2]})
+years
+
+```
+
+#Lapply con argunemntos adicionales
+
+```{r}
+
+seleccionar <- function(x, index){
+  x[index]
+}
+
+names <- lapply(split_low, seleccionar, index = 1)
+names
+
+years <- lapply(split_low, seleccionar, index = 2)
+years
+```
+
+#Usar sapply
+Ejemplo con temperaturas
+
+
+```{r}
+t1 <- c( 3,  7,  9,  6, -1)
+t2 <- c( 6,  9, 12, 13,  5)
+t3 <- c(4,  8,  3, -1, -3)
+t4 <- c(1,  4,  7,  2, -2)
+t5 <- c(5, 7, 9, 4, 2)
+t6 <- c(-3,  5,  8,  9,  4)
+t7 <- c(3, 6, 9, 4, 1)
+
+temp <- list(t1, t2, t3, t4, t5, t6, t7)
+temp
+
+class(temp)
+
+
+#usamos sapply para encontrar el dia con menor temperatura
+sapply(temp, min)
+
+#hacemos lo mismo pero para encontrar la temperatura mas alta pero usando lapply
+lapply(temp, max)
+sapply(temp, max)
+
+
+```
+
+#Usar sapply con funciones propias
+Se pueden usar funciones propias dentro de sapply haciendo la misma funcionabilidad que lapply. Asi mismo tambien pueden ser funciones definidas o anonimas
+
+```{r}
+
+extremes_avg <- function(x){
+  (min(x) + max(x))/2
+}
+
+sapply(temp, extremes_avg)
+lapply(temp, extremes_avg)
+
+```
+
+#Sapply y vectores
+
+```{r}
+
+#Creamos una funcion que regrese los extremos de cada vector
+extremes <- function(x){
+  c(min = min(x), max = max(x))
+}
+
+sapply(temp, extremes)
+lapply(temp, extremes)
+
+```
+
+#Simplificacion de sapply
+
+```{r}
+
+below_zero <- function(x) {
+  return(x[x < 0])
+}
+
+freezing_s <- sapply(temp, below_zero)
+freezing_s
+
+freezing_l <- lapply(temp, below_zero)
+freezing_l
+
+identical(freezing_s, freezing_l)
+
+```
+
+#sapply que devuelve NULL
+```{r}
+
+print_info <- function(x) {
+  cat("El promedio de la temperatura es", mean(x), "\n")
+}
+
+sapply(temp, print_info)
+lapply(temp, print_info)
+
+```
+
+#Vapply
+
+```{r}
+
+basics <- function(x) {
+  c(min = min(x), mean = mean(x), max = max(x))
+}
+
+vapply(temp, basics, numeric(3))
+
+```
+
+#Puede haber problemas si la salida no es del mismo tamaño que la esperada
+
+```{r}
+
+basics <- function(x) {
+   c(min = min(x), mean = mean(x), median = median(x), max = max(x))
+}
+
+#esto tiene error
+vapply(temp, basics, numeric(3))
+
+#esto no :v
+vapply(temp, basics, numeric(4))
+
+```
+
+#De sapply a vapply
+
+```{r}
+
+vapply(temp, max, numeric(1))
+
+vapply(temp, function(x, y) { mean(x) > y }, logical(1), y = 5)
+
+```

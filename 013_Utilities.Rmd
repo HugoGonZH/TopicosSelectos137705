@@ -1,0 +1,256 @@
+---
+title: "Utilities"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Utilidades matematicas
+
+```{r}
+
+errors <- c(1.9, -2.6, 4.0, -9.5, -3.4, 7.3)
+sum(abs(round(errors)))
+
+```
+
+## Encontrando errores
+
+```{r}
+vec1 <- c(1.5, 2.5, 8.4, 3.7, 6.3)
+vec2 <- rev(vec1)
+
+mean(abs(vec1), abs(vec2))
+
+#Si no sabemos el significado o la estructura de alguna funcion, se utiliza ?mean en la consola. En esta nos mostrara informacion sobre la funcion
+
+mean(c(abs(vec1), abs(vec2)))
+
+```
+
+#Data utilities
+
+```{r}
+
+linkedin <- list(16, 9, 13, 5, 2, 17, 14)
+linkedin
+
+facebook <- list(17, 7, 5, 16, 8, 13, 14)
+facebook
+
+#convertir listas a vectores
+li_vec <- unlist(linkedin)
+li_vec
+fb_vec <- unlist(facebook)
+fb_vec
+
+#Mezclar datos en un solo vector
+social_vec <- append(li_vec, fb_vec)
+social_vec
+
+#ordenamos datos
+sort(social_vec, decreasing = TRUE)
+
+
+rep(seq(1, 7, by = 2), times = 7)
+```
+
+#Calculando la suma en una secuencia
+
+```{r}
+
+seq1 <- seq(1, 500, by = 3)
+seq1
+
+seq2 <- seq(1200, 900, by = -7)
+seq2
+
+sum(seq1) + sum(seq2)
+
+```
+
+#Usando grepl y grep
+
+```{r}
+
+emails <- c("john.doe@ivyleague.edu", "education@world.gov", "dalai.lama@peace.org",
+            "invalid.edu", "quant@bigdatacollege.edu", "cookie.monster@sesame.tv")
+
+#Compara si el patron "edu" se encuentra en la cadena de caracteres de (en este caso) emails. En otras palabras, busca si los correos tienen edu en alguna parte.
+grepl("edu", emails)
+
+#Este se encarga de mostrar el numero de posicion en el que se encuentran en el vector
+hits <- grep("edu", emails)
+hits
+
+#Los buscamos en el vector
+emails[hits]
+
+
+#Busqueda mas especifica con metacaracteres
+grepl("@.*\\.edu$", emails)
+hits <- grep("@.*\\.edu$", emails)
+hits
+
+emails[hits]
+
+```
+
+#sub y gsub
+
+
+```{r}
+
+emails <- c("john.doe@ivyleague.edu", "education@world.gov", "global@peace.org",
+            "invalid.edu", "quant@bigdatacollege.edu", "cookie.monster@sesame.tv")
+
+#Convertimos a todos los elementos que coinciden con terminacion en edu, y lo sustituimos por la nueva terminacion
+sub("@.*\\.edu$", "@datacamp.edu", emails)
+
+################################################
+
+awards <- c("Won 1 Oscar.",
+  "Won 1 Oscar. Another 9 wins & 24 nominations.",
+  "1 win and 2 nominations.",
+  "2 wins & 3 nominations.",
+  "Nominated for 2 Golden Globes. 1 more win & 2 nominations.",
+  "4 wins & 1 nomination.")
+
+sub(".*\\s([0-9]+)\\snomination.*$", "\\1", awards)
+
+```
+
+#Fechas
+
+```{r}
+
+#Saber la fecha
+today <- Sys.Date()
+today
+
+unclass(today)
+
+#Saber la hora
+now <- Sys.time()
+now
+
+unclass(now)
+
+#############################################
+#Definimos algunas fechas
+str1 <- "May 23, '96"
+str2 <- "2012-03-15"
+str3 <- "30/January/2006"
+
+#Convertimos el texto en fechas: fecha1, fecha2, fecha3, para esto tenemos tres formas de escribirlo
+date1 <- as.Date(str1, format = "%b %d, '%y")
+date1
+
+date2 <- as.Date(str2)
+date2
+
+date3 <- as.Date(str3, format = "%d/%B/%Y")
+date3
+
+#Despues convertimos las fechas en texto, en base a la fecha que tienen
+format(date1, "%A") #Devuelve el dia de la semana
+
+format(date2, "%d")
+
+format(date3, "%b %Y")
+
+```
+
+#Tiempo
+
+```{r}
+
+#Con esto obtenemos informacion sobre los simbolos de conversion :'v
+?strptime
+
+str1 <- "May 23, '96 hours:23 minutes:01 seconds:45"
+str2 <- "2012-3-12 14:23:08"
+
+time1 <- as.POSIXct(str1, format = "%B %d, '%y hours:%H minutes:%M seconds:%S")
+time1
+
+time2 <- as.POSIXct(str2)
+time2
+
+#Convirtiendo el formato en strings
+format(time1, "%M")
+
+format(time2, "%I:%M %p")
+
+```
+
+#Calculos con fechas
+
+```{r}
+#definimos algunos datos
+day1 <- as.Date("2018-08-18")
+day2 <- as.Date("2018-08-20")
+day3 <- as.Date("2018-08-25")
+day4 <- as.Date("2018-08-31")
+day5 <- as.Date("2018-09-05")
+
+day5 - day1
+
+#Creamos un vector pizza con las fechas
+pizza <- c(day1, day2, day3, day4, day5)
+pizza
+
+#Obtenemos las diferencias que hay entre cadad fecha
+day_diff <- diff(pizza)
+day_diff
+
+#obtenemos el promedio entre dos fechas
+mean(day_diff)
+
+```
+
+#Calculos con tiempo
+
+```{r}
+login <- as.POSIXct("2018-08-22 10:18:04 UTC")
+login
+logout <- as.POSIXct("2018-08-22 10:56:29 UTC")
+logout
+
+#calculamos la difernecia entre el login y el logout
+time_online <- logout - login
+time_online
+
+
+```
+
+#EJEMPLO FINAL
+
+```{r}
+
+astro <- c("20-Mar-2015",
+           "25-Jun-2015", 
+           "23-Sep-2015",
+           "22-Dec-2015")
+astro
+
+meteo <- c("March 1, 15",
+           "June 1, 15", 
+           "September 1, 15",
+           "December 1, 15") 
+meteo
+
+#Convertimos los vectores en objetos de fecha
+astro_dates <- as.Date(astro, format = "%d-%b-%Y")
+astro_dates
+
+meteo_dates <- as.Date(meteo, format = "%B %d, %y")
+meteo_dates
+
+#Calculamos la diferencia maxima absoluta entre ambos vectores
+max(abs(meteo_dates - astro_dates))
+
+```
+

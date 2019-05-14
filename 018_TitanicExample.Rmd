@@ -1,0 +1,55 @@
+---
+title: "TitanicExample"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Titanic
+
+```{r}
+
+# Import titanic from csv
+titanic <- read.csv("data/titanic.csv")
+
+# Call dim on titanic
+dim(titanic)
+
+# Generate histogram of Age column
+hist(titanic$Age)
+
+```
+
+## Queries exploratorios
+
+```{r}
+
+# Print out total value of fares
+sum(titanic$Fare)
+
+# Print out proportion of passengers that survived
+mean(titanic$Survived)
+
+```
+
+## Inferir por el genero
+
+```{r}
+
+# Extract the name column from titanic
+pass_names <- titanic$Name
+#pass_names
+#class(pass_names)
+
+# Create the logical vector is_man
+is_man <- grepl(", Mr\\.", pass_names)
+
+# Count the number of men
+sum(is_man)
+
+# Count number of men based on gender
+sum(titanic$Sex == "male")
+
+```

@@ -1,0 +1,133 @@
+---
+title: "TypesOfVisualizations"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Tipos de visualizacion
+# Visualizando la media de GDP per capita
+
+```{r}
+
+library(gapminder)
+library(ggplot2)
+library(dplyr)
+
+
+#Resumimos la media de gdp por año
+by_year <- gapminder %>%
+  group_by(year) %>%
+  summarize(medianGdpPercap = median(gdpPercap))
+
+ggplot(by_year, aes(x = year, y = medianGdpPercap)) + geom_line() + 
+  expand_limits(y = 0)
+
+```
+
+## Visualizando la media de GDP por continente
+
+```{r}
+
+#Resumimos los datos
+by_year_continent <- gapminder %>%
+  group_by(year, continent) %>%
+  summarize(medianGdpPercap = median(gdpPercap))
+
+ggplot(by_year_continent, aes(x = year, y = medianGdpPercap, color = continent)) +
+  geom_line() +
+  expand_limits(y = 0)
+
+```
+
+## Visualizando media GDP por continente de diferente manera (BARRAS)
+
+
+```{r}
+
+#Resumimos la informacion
+by_continent <- gapminder %>%
+  filter(year == 1952) %>%
+  group_by(continent) %>%
+  summarize(medianGdpPercap = median(gdpPercap))
+
+#Creamos una grafica de barras
+ggplot(by_continent, aes(x = continent, y = medianGdpPercap)) +
+  geom_col()
+
+```
+
+## Visualizando GDP por pais en oceania
+
+```{r}
+
+#Filtro para observar en el continente de oceania en 1952
+oceania_1952 <- gapminder %>%
+  filter(continent == "Oceania", year == 1952)
+
+#Creamos la grafica de barras por pais
+ggplot(oceania_1952, aes(x = country, y = gdpPercap)) +
+  geom_col()
+
+```
+
+## Visualizando poblacion
+
+```{r}
+
+gapminder_1952 <- gapminder %>%
+  filter(year == 1952)
+
+#Creamos el histograma de la poblacion
+ggplot(gapminder_1952, aes(x = pop)) + 
+  geom_histogram()
+
+```
+
+## Visualizando poblacion con escala log en el eje-x
+
+```{r}
+
+gapminder_1952 <- gapminder %>%
+  filter(year == 1952)
+
+#Creamos el histograma con la escala de logaritmo
+ggplot(gapminder_1952, aes(x = pop)) + 
+  geom_histogram() + 
+  scale_x_log10()
+
+```
+
+## Comparando el GDP entre continentes
+
+```{r}
+
+gapminder_1952 <- gapminder %>%
+  filter(year == 1952)
+
+#Creamos un diagrama de caja por continentes
+ggplot(gapminder_1952, aes(x = continent, y = gdpPercap)) + 
+  geom_boxplot() + 
+  scale_y_log10()
+
+```
+
+##Agreganto titulos a la grafica
+
+```{r}
+
+gapminder_1952 <- gapminder %>%
+  filter(year == 1952)
+
+#Agregamos un titulo a la grafica
+ggplot(gapminder_1952, aes(x = continent, y = gdpPercap)) +
+  geom_boxplot() + 
+  scale_y_log10() + 
+  ggtitle("Comparando el GDP per capita entre continentes")
+
+```
+
+
+

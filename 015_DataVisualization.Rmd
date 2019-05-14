@@ -1,0 +1,97 @@
+---
+title: "DataVisualization"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Asignamos a una variable 
+
+```{r}
+
+install.packages("ggplot2")
+library("ggplot2")
+library("gapminder")
+
+gapminder_1952 <- gapminder %>%
+  filter(year == 1952)
+
+```
+
+## Comparando variables
+Usamos la variable que creamos anteriormente para graficarla
+
+```{r}
+
+ggplot(gapminder_1952, aes(x = pop, y = gdpPercap)) + geom_point()
+
+```
+
+##Comparando poblacion y expectativa de vida
+
+```{r}
+
+ggplot(gapminder_1952, aes(x = pop, y = lifeExp)) + geom_point()
+
+```
+
+## Cambiando el tamaño del eje x
+
+```{r}
+
+ggplot(gapminder_1952, aes(x = pop, y = lifeExp)) + geom_point() + scale_x_log10()
+
+```
+
+## Usando escalas con Log en la grafica
+
+```{r}
+
+ggplot(gapminder_1952, aes(x = pop, y = gdpPercap)) + geom_point() + scale_x_log10() + scale_y_log10()
+
+```
+
+##Agregando color a la grafica
+
+```{r}
+
+ggplot(gapminder_1952, aes(x = pop, y = lifeExp, color = continent)) +
+  geom_point() +
+  scale_x_log10()
+
+```
+
+##Cambiando el tamaño y color a la grafica
+
+```{r}
+
+ggplot(gapminder_1952, aes(x = pop, y = lifeExp, color = continent, size = gdpPercap)) +
+  geom_point() + 
+  scale_x_log10()
+
+```
+
+##Creando subgraficas por cada continente
+
+```{r}
+
+ggplot(gapminder_1952, aes(x = pop, y = lifeExp)) +
+  geom_point() + 
+  scale_x_log10() +
+  facet_wrap(~ continent)
+
+```
+
+##Creando subgraficas por año
+
+```{r}
+
+ggplot(gapminder, aes(x = gdpPercap, y = lifeExp, color = continent, size = pop)) +
+  geom_point() +
+  scale_x_log10() +
+  facet_wrap(~ year)
+
+```
+
